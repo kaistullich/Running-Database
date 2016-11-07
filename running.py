@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 conn = sqlite3.connect('running_stats.db')
 c = conn.cursor()
@@ -39,6 +40,18 @@ if __name__ == "__main__":
 
                 create_table()
                 data_entry()
+                print ('\n !!! Checking for errors !!!')
+                time.sleep(1)
+                print ('.')
+                time.sleep(1)
+                print ('..')
+                time.sleep(1)
+                print ('...')
+                time.sleep(1)
+                print ('....')
+                time.sleep(1)
+                print ('\n ~~ Successful Upload into Database! ~~')
+                
             
             except Exception as e:
                 print ('\n\n*************************')
