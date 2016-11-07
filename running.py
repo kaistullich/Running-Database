@@ -18,6 +18,13 @@ def update_menu():
     print ('\n1) If you want to insert into the DATE column')
     print ('2) For all other columns')
 
+def read_from_db():
+    c.execute('SELECT * FROM database_test')
+    print ('\n        <CURRENT DATABASE DATA>\n')
+    for row in c.fetchall():
+        print (row,'\n')
+    return read_from_db
+
 if __name__ == "__main__":
 
     def create_table():
@@ -68,12 +75,6 @@ if __name__ == "__main__":
         
         # PRINT CURRENT Database
         if choice == '2':
-            def read_from_db():
-                c.execute('SELECT * FROM database_test')
-                print ('\n        <CURRENT DATABASE DATA>\n')
-                for row in c.fetchall():
-                    print (row,'\n')
-                return read_from_db
             read_from_db()
         
         # UPDATING the Database
