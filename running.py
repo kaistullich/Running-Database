@@ -1,10 +1,10 @@
 import sqlite3
 import time
 
-conn = sqlite3.connect('running_stats.db')
+conn = sqlite3.connect('test_db.db')
 c = conn.cursor()
 
-def menu():
+def start_menu():
     print ('\n------------------------')
     print ('    RUNNING DATABASE')
     print ('------------------------\n')
@@ -14,19 +14,23 @@ def menu():
     print ('4) Delete a certain row')
     print ('0) EXIT')
 
+def update_menu():
+    print ('\n1) If you want to insert into the DATE column')
+    print ('2) For all other columns')
+
 if __name__ == "__main__":
 
     def create_table():
-        c.execute('CREATE TABLE IF NOT EXISTS running_data(date TEXT, distance REAL, duration REAL, avg_pace REAL)')
+        c.execute('CREATE TABLE IF NOT EXISTS data_test(date TEXT, distance REAL, duration REAL, avg_pace REAL)')
     create_table()
     
     choice = ""
     while (choice != '0'):
-        menu()
+        start_menu()
         choice = input('\nEnter number from menu above to continue: ')
         print ('-------------------------------------------')
         
-        # Inserting into Database
+        # INSERTING into Database
         if choice == '1':
             try:
                 date = input('\n\n\nA) Enter the DATE for the run completed (i.e. 2016-01-10): ')
@@ -39,10 +43,8 @@ if __name__ == "__main__":
                 print ('\n      ++ Average Pace Entered into Database ++')
                 
                 def data_entry():
-                    c.execute("INSERT INTO running_data VALUES (?, ?, ?, ?)", (date, distance, duration, avg_pace))
+                    c.execute("INSERT INTO data_test VALUES (?, ?, ?, ?)", (date, distance, duration, avg_pace))
                     conn.commit()
-                    c.close()
-                    conn.close()
 
                 data_entry()
                 print ('\n !!! Checking for errors !!!')
@@ -62,32 +64,50 @@ if __name__ == "__main__":
                 print ('ERROR FOUND! Re-Do Entry!:',e)
                 print ('*************************')
         
-        # Print all the rows within the database
+        # PRINT CURRENT Database
         if choice == '2':
             def read_from_db():
-                c.execute('SELECT * FROM running_data')
-                data = c.fetchall()
-                print (data)
+                c.execute('SELECT * FROM data_test')
+                print ('\n        <CURRENT DATABASE DATA>\n')
+                a = 0
+                for row in c.fetchall():
+                    a+= 1
+                    print (a,row,'\n')
+                return read_from_db
             read_from_db()
         
-        # Updating the Database
+        # UPDATING the Database
         if choice == '3':
             def update_db():
-                c.execute('SELECT * FROM running_data')
-                # EDIT THE (?)
-                c.execute('UPDATE running_data SET value = (?) WHERE -- <enter column name> =  (?)')
+                c.execute('SELECT * FROM data_test')
+                # 'i' prints current database information
+                i = read_from_db()
+                print (i)
+                update_column.lower() = input('Enter column name you want to update: ')
+                # prints the menu for either updating DATE or all other columns
+                update_menu()
+                update_choice = input('\nEnter choice number from menu: ')
+                if update_choice == '1':
+                    date = input('Enter the NEW date (i.e. 2016-01-01): ')
+                    return date
+                if update_choice == '2':
+                    all_other_rows = float(input('Enter the NEW value (i.e. 3.11): '))
+                    return all_other_rows
+                c.execute('UPDATE running_data SET (?) = (?) WHERE (?) = (?)', (update_column))
                 conn.commit()
             update_db()
         
-        # Deleting rows in the Database
+        # DELETING rows in the Database
         if choice == '4':
             def delete_db():
                 c.execute('SELECT * FROM running_data')
                 # EDIT THE (?)
-                c.execute('DELETE FROM running_data WHERE -- <enter column name> = (?)')
+                c.execute('DELETE FROM running_data WHERE (?) = (?)', ())
                 conn.commit()
             delete_db()
         
-        # Exit out of program
+        # EXIT out of program
         if choice == '0':
-            print ('\n%% EXITED %%')
+            c.close()
+            conn.close()
+            print ('\n\n')
