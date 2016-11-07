@@ -10,7 +10,8 @@ def menu():
     print ('------------------------\n')
     print ('1) Enter Data')
     print ('2) Show all data within Database')
-    print ('3) Update/Edit a certain data row')
+    print ('3) Update a certain row')
+    print ('4) Delete a certain row')
     print ('0) EXIT')
 
 if __name__ == "__main__":
@@ -24,8 +25,9 @@ if __name__ == "__main__":
         menu()
         choice = input('\nEnter number from menu above to continue: ')
         print ('-------------------------------------------')
+        
+        # Inserting into Database
         if choice == '1':
-            # Try/Except Block
             try:
                 date = input('\n\n\nA) Enter the DATE for the run completed (i.e. 2016-01-10): ')
                 print ('\n      ++ Date Entered into Database ++')
@@ -60,5 +62,32 @@ if __name__ == "__main__":
                 print ('ERROR FOUND! Re-Do Entry!:',e)
                 print ('*************************')
         
+        # Print all the rows within the database
+        if choice == '2':
+            def read_from_db():
+                c.execute('SELECT * FROM running_data')
+                data = c.fetchall()
+                print (data)
+            read_from_db()
+        
+        # Updating the Database
+        if choice == '3':
+            def update_db():
+                c.execute('SELECT * FROM running_data')
+                # EDIT THE (?)
+                c.execute('UPDATE running_data SET value = (?) WHERE -- <enter column name> =  (?)')
+                conn.commit()
+            update_db()
+        
+        # Deleting rows in the Database
+        if choice == '4':
+            def delete_db():
+                c.execute('SELECT * FROM running_data')
+                # EDIT THE (?)
+                c.execute('DELETE FROM running_data WHERE -- <enter column name> = (?)')
+                conn.commit()
+            delete_db()
+        
+        # Exit out of program
         if choice == '0':
             print ('\n%% EXITED %%')
