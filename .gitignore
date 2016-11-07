@@ -1,2 +1,4 @@
 .DS_Store
 running_stats.db
+running_data.db
+test_db.db
