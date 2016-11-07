@@ -9,20 +9,24 @@ def menu():
     print ('    RUNNING DATABASE')
     print ('------------------------\n')
     print ('1) Enter Data')
+    print ('2) Show all data within Database')
+    print ('3) Update/Edit a certain data row')
     print ('0) EXIT')
 
 if __name__ == "__main__":
 
+    def create_table():
+        c.execute('CREATE TABLE IF NOT EXISTS running_data(date TEXT, distance REAL, duration REAL, avg_pace REAL)')
+    create_table()
+    
     choice = ""
     while (choice != '0'):
         menu()
         choice = input('\nEnter number from menu above to continue: ')
         print ('-------------------------------------------')
         if choice == '1':
+            # Try/Except Block
             try:
-                def create_table():
-                    c.execute('CREATE TABLE IF NOT EXISTS running_data(date TEXT, distance REAL, duration REAL, avg_pace REAL)')
-                
                 date = input('\n\n\nA) Enter the DATE for the run completed (i.e. 2016-01-10): ')
                 print ('\n      ++ Date Entered into Database ++')
                 distance = float(input('\nB) Enter TOTAL DISTANCE RAN (i.e 2.11): '))
@@ -38,7 +42,6 @@ if __name__ == "__main__":
                     c.close()
                     conn.close()
 
-                create_table()
                 data_entry()
                 print ('\n !!! Checking for errors !!!')
                 time.sleep(0.5)
@@ -52,7 +55,6 @@ if __name__ == "__main__":
                 time.sleep(0.5)
                 print ('\n ~~ Successful Upload into Database! ~~')
                 
-            
             except Exception as e:
                 print ('\n\n*************************')
                 print ('ERROR FOUND! Re-Do Entry!:',e)
