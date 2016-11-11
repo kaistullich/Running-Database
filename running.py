@@ -1,7 +1,7 @@
 import sqlite3
 import time
 
-conn = sqlite3.connect('test_database.db')
+conn = sqlite3.connect('running_stats.db')
 c = conn.cursor()
 
 def start_menu():
@@ -19,7 +19,7 @@ def update_menu():
     print ('2) For all other columns')
 
 def read_from_db():
-    c.execute('SELECT * FROM database_test')
+    c.execute('SELECT * FROM running_data')
     print ('\n        <CURRENT DATABASE DATA>\n')
     for row in c.fetchall():
         print (row,'\n')
@@ -28,7 +28,7 @@ def read_from_db():
 if __name__ == "__main__":
 
     def create_table():
-        c.execute('CREATE TABLE IF NOT EXISTS database_test(id INTEGER NOT NULL PRIMARY KEY, date TEXT, distance REAL, duration REAL, avg_pace REAL)')
+        c.execute('CREATE TABLE IF NOT EXISTS running_data(id INTEGER NOT NULL PRIMARY KEY, date TEXT, distance REAL, duration REAL, avg_pace REAL)')
     create_table()
     
     choice = ""
@@ -52,10 +52,11 @@ if __name__ == "__main__":
                 print ('\n      ++ Average Pace Entered into Database ++')
                 
                 def data_entry():
-                    c.execute("INSERT INTO database_test VALUES (?, ?, ?, ?, ?)", (id, date, distance, duration, avg_pace))
+                    c.execute("INSERT INTO running_data VALUES (?, ?, ?, ?, ?)", (id, date, distance, duration, avg_pace))
                     conn.commit()
-
+                # Inputs data into DB
                 data_entry()
+                
                 print ('\n !!! Checking for errors !!!')
                 time.sleep(0.5)
                 print ('.')
@@ -80,11 +81,11 @@ if __name__ == "__main__":
         # UPDATING the Database
         if choice == '3':
             def update_db():
-                c.execute('SELECT * FROM database_test')
+                c.execute('SELECT * FROM running_data')
                 # 'i' prints current database information
                 i = read_from_db()
                 print (i)
-                update_column = input('Enter column name you want to update: ')
+                update_column = input('Enter the column name you want to update: ')
                 # prints the menu for either updating DATE or all other columns
                 update_menu()
                 update_choice = input('\nEnter choice number from menu: ')
@@ -94,16 +95,16 @@ if __name__ == "__main__":
                 if update_choice == '2':
                     all_other_rows = float(input('Enter the NEW value (i.e. 3.11): '))
                     return all_other_rows
-                c.execute('UPDATE database_test SET (?) = (?) WHERE (?) = (?)', (update_column.lower()))
+                c.execute('UPDATE running_data SET (?) = (?) WHERE (?) = (?)', (update_column.lower()))
                 conn.commit()
             update_db()
         
         # DELETING rows in the Database
         if choice == '4':
             def delete_db():
-                c.execute('SELECT * FROM database_test')
+                c.execute('SELECT * FROM running_data')
                 # EDIT THE (?)
-                c.execute('DELETE FROM database_test WHERE (?) = (?)', ())
+                c.execute('DELETE FROM running_data WHERE (?) = (?)', ())
                 conn.commit()
             delete_db()
         
